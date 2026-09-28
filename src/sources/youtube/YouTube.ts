@@ -3106,7 +3106,6 @@ export default class YouTubeSource {
         if (urlAge > URL_MAX_AGE_MS) {
           const refreshed = await refreshUrl('URL age > 4.5h')
           if (!refreshed) {
-            if (parkedForRecovery) return
             cleanup(new Error('Failed to refresh expired URL'))
             return
           }
@@ -3213,7 +3212,6 @@ export default class YouTubeSource {
               }
               const refreshed = await refreshUrl('HTTP 416')
               if (refreshed) continue
-              if (parkedForRecovery) return
               cleanup(new Error('HTTP 416: max URL refresh reached'))
               return
             }
@@ -3230,7 +3228,6 @@ export default class YouTubeSource {
               }
               const refreshed = await refreshUrl(`HTTP ${result.statusCode}`)
               if (refreshed) continue
-              if (parkedForRecovery) return
               cleanup(
                 new Error(`HTTP ${result.statusCode}: max URL refresh reached`)
               )
@@ -3281,7 +3278,6 @@ export default class YouTubeSource {
             )
             const refreshed = await refreshUrl('invalid range response')
             if (refreshed) continue
-            if (parkedForRecovery) return
             cleanup(new Error('Invalid HTTP range response'))
             return
           }
@@ -3432,7 +3428,6 @@ export default class YouTubeSource {
                 'multiple ECONNRESET on same URL'
               )
               if (refreshed) continue
-              if (parkedForRecovery) return
               cleanup(new Error('ECONNRESET: max URL refresh reached'))
               return
             } else {
@@ -3450,7 +3445,6 @@ export default class YouTubeSource {
             }
             const refreshed = await refreshUrl('mid-stream 403/404')
             if (refreshed) continue
-            if (parkedForRecovery) return
             cleanup(new Error('mid-stream 403/404: max URL refresh reached'))
             return
           }
